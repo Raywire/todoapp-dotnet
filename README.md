@@ -60,6 +60,12 @@ dotnet ef migrations add "Initial Migrations"
 dotnet ef database update
 ```
 
+### Authentication migrations
+```
+dotnet ef migrations Add "Adding authentication tables to our API"
+dotnet ef database update
+```
+
 ### Create a migration
 ```
 dotnet ef migrations add "Initial Migrations"
