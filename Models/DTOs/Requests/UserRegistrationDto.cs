@@ -5,6 +5,9 @@ namespace todoapp_dotnet.Models.DTOs.Requests
     public class UserRegistrationDto
     {
         [Required]
+        public string Username { get; set; }
+
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
