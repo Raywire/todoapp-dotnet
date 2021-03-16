@@ -63,7 +63,31 @@ namespace todoapp_dotnet
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "todoapp_dotnet", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo App", Version = "v1" });
+                // To Enable authorization using Swagger (JWT)  
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()  
+                {  
+                    Name = "Authorization",  
+                    Type = SecuritySchemeType.ApiKey,  
+                    Scheme = "Bearer",  
+                    BearerFormat = "JWT",  
+                    In = ParameterLocation.Header,  
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",  
+                });  
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement  
+                {  
+                    {  
+                        new OpenApiSecurityScheme
+                            {  
+                                Reference = new OpenApiReference  
+                                {  
+                                    Type = ReferenceType.SecurityScheme,  
+                                    Id = "Bearer"  
+                                }  
+                            }, 
+                        new string[] {}  
+                    } 
+                });
             });
         }
 
@@ -74,7 +98,7 @@ namespace todoapp_dotnet
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "todoapp_dotnet v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo App v1"));
             }
 
             app.UseHttpsRedirection();
