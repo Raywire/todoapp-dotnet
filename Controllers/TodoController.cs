@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using todoapp_dotnet.Data;
 using todoapp_dotnet.Models;
+using todoapp_dotnet.Models.DTOs.Requests;
 
 namespace todoapp_dotnet.Controllers
 {
@@ -14,10 +17,12 @@ namespace todoapp_dotnet.Controllers
     public class TodoController : ControllerBase
     {
         private readonly ApiDbContext _context;
+        private IMapper _mapper;
 
-        public TodoController(ApiDbContext context)
+        public TodoController(ApiDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -28,14 +33,15 @@ namespace todoapp_dotnet.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateItem(ItemData data)
+        public async Task<IActionResult> CreateItem(TodoCreateDto data)
         {
             if(ModelState.IsValid)
             {
-                await _context.Items.AddAsync(data);
+                var todoModel = _mapper.Map<ItemData>(data);
+                await _context.Items.AddAsync(todoModel);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction("GetItem", new {data.Id}, data);
+                return CreatedAtAction("GetItem", new {todoModel.Id}, data);
             }
 
             return new JsonResult("Data is not valid") {StatusCode = 422};

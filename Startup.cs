@@ -39,6 +39,8 @@ namespace todoapp_dotnet
                 Configuration.GetConnectionString("DefaultConnection")
             ));
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
